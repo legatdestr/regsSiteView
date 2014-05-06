@@ -1,0 +1,3 @@
+regsSiteView
+============
+Yii extension.
