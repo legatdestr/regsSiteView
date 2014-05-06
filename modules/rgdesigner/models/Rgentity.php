@@ -17,7 +17,7 @@ class Rgentity extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return '{{rgentity}}';
+        return Yii::app()->modules['rgdesigner']['dbSchema'] . '.rgentity';
     }
 
     /**
@@ -81,8 +81,8 @@ class Rgentity extends CActiveRecord {
         $dataProvider = new CActiveDataProvider($this, array(
             'criteria' => $criteria,
         ));
-        
-        return $dataProvider; 
+
+        return $dataProvider;
     }
 
     /**
@@ -104,7 +104,7 @@ class Rgentity extends CActiveRecord {
      * @return boolean false on unsuccessfull saving
      * @return Rgentity on success 
      */
-    public static function saveEntityWithAttrs($entity,  $attrs, $useTransaction = true, &$attrErrors = null) {
+    public static function saveEntityWithAttrs($entity, $attrs, $useTransaction = true, &$attrErrors = null) {
         if ($useTransaction)
             $transaction = Yii::app()->db->beginTransaction();
         $entity_id = $entity->id;

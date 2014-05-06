@@ -16,7 +16,9 @@ abstract class RgAttrsHelper extends CComponent {
      * @return \CSqlDataProvider 
      */
     public static function getRgAttrs($entity_id) {
-        $sql = 'SELECT * FROM rgattr WHERE entity_id = :entity_id';
+        
+        $sql = 'SELECT * FROM '. Rgattr::model()->tableName(). ' WHERE entity_id = :entity_id';
+        
         $dataProvider = new CSqlDataProvider($sql, array(
             'pagination' => false,
             'params' => array(
@@ -53,8 +55,8 @@ abstract class RgAttrsHelper extends CComponent {
         if (!$dbViewName) {
             $dbViewName = Yii::app()->db->createCommand(
                                     'SELECT dbview '
-                                    . 'FROM rgentity '
-                                    . 'WHERE id = :entity_id ORDER BY dbview')
+                                    . ' FROM ' . Rgentity::model()->tableName() 
+                                    . ' WHERE id = :entity_id ORDER BY dbview')
                             ->bindParam(':entity_id', $entity_id, PDO::PARAM_INT)->queryScalar();
         }
         // gettting attributes established by user

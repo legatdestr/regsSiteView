@@ -28,7 +28,7 @@ class RgBaseModel extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return get_class($this);
+        return Yii::app()->modules['rgdesigner']['dbSchema'] . '.'. get_class($this);
     }
 
     public function getVisibleAttrsDbNames() {
@@ -82,8 +82,8 @@ class RgBaseModel extends CActiveRecord {
             $db = Yii::app()->db;
             $cmd = $db->createCommand(
                     'SELECT * '
-                    . 'FROM rgattr '
-                    . 'WHERE '
+                    . ' FROM  ' . Rgattr::model()->tableName()
+                    . ' WHERE '
                     . ' enabled = true and '
                     . ' entity_id = :entity_id'
             );

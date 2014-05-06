@@ -58,7 +58,7 @@ abstract class RgModelCreator extends CComponent {
             }
         } else {
             $db = Yii::app()->db;
-            $sql = 'SELECT * FROM rgentity WHERE id = :id';
+            $sql = 'SELECT * FROM ' . Rgentity::model()->tableName() .  ' WHERE id = :id';
             $cmd = $db->createCommand($sql);
             $cmd->bindParam(':id', $entity_id, PDO::PARAM_INT);
             $fetchAssociative = true;

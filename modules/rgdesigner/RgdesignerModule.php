@@ -14,6 +14,8 @@ class RgdesignerModule extends CWebModule {
      * can be changed in the module settings in the application configuration file
      */
     public $dbPrefix = 'reg_';
+    
+    public $dbSchema;
 
     /**
      * Send or not user messages

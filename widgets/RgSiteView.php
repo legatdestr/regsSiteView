@@ -10,7 +10,7 @@
 class RgSiteView extends CWidget {
 
     public $entity_id;
-
+    
     public function init() {
         // this method will be invoked in CBaseController::beginWidget ()
     }

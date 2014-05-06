@@ -5,21 +5,20 @@ return array(
     'language' => 'ru',
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'Rg Component',
-
     'import' => array(
         'application.models.*',
         'application.components.*',
-        
         // Rg component
         'ext.regsSiteView.components.*',
     ),
-       // Rg constructor module
+    // Rg constructor module
     'modules' => array(
         'rgdesigner' => array(
             'class' => 'ext.regsSiteView.modules.rgdesigner.RgdesignerModule',
             'dbPrefix' => 'reg_',
             'printFlashes' => true,
             'sendFlashes' => true,
+            'dbSchema' => 'public',
         ),
     ),
     // application components
@@ -35,12 +34,14 @@ return array(
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ),
         ),
-
         'db' => array(
             'connectionString' => 'pgsql:host=127.0.1.1;dbname=test',
             'username' => 'username',
             'password' => 'password',
             'charset' => 'utf8',
+            'initSQLs' => array(
+                'SET search_path TO public;'
+            )
         ),
         'errorHandler' => array(
             // use 'site/error' action to display errors
@@ -58,7 +59,5 @@ return array(
         'request' => array(
             'enableCsrfValidation' => true,
         ),
-
     ),
-
 );
