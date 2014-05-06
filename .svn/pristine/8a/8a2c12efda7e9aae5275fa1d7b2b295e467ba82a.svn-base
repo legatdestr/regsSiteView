@@ -1,0 +1,59 @@
+<?php
+/**
+ * @var $filters array
+ * @var $model RgBaseModel
+ */
+?>
+<div class="form">
+    <?php
+    $form = $this->beginWidget('CActiveForm', array(
+        'id' => 'rgFilterForm' . $model->id,
+        'htmlOptions' => array(
+            'onsubmit' => 'return false;',
+        ),
+    ));
+
+    $textFieldsFilters = (isset($filters[Rgattr::RG_FILTER_TYPE_TEXTINP])) ?
+            $filters[Rgattr::RG_FILTER_TYPE_TEXTINP] : array();
+
+    $dropDnFilters = (isset($filters[Rgattr::RG_FILTER_TYPE_DROPDN])) ?
+            $filters[Rgattr::RG_FILTER_TYPE_DROPDN] : array();
+
+    $jsBinds = array();
+    foreach ($textFieldsFilters as $key => $textFieldAttr) {
+        $dbName = $textFieldAttr['dbname'];
+        echo $form->label($model, $dbName);
+        echo $form->textField($model, $dbName);
+        $jsBinds[] = get_class($model) . '_' . $dbName;
+    }
+    $jsDrDnBinds = array();
+    foreach ($dropDnFilters as $key => $dropDnAttr) {
+        $dbName = $dropDnAttr['dbname'];
+        echo $form->label($model, $dbName);
+        echo Chtml::activeDropDownList($model, $dbName, Chtml::listData($model->getDrDnFilterProvider($dbName)->getData(), $dbName, $dbName), array(
+            'empty' => Rgattr::getFilterType()[Rgattr::RG_FILTER_TYPE_NONE]
+        ));
+        $jsBinds[] = get_class($model) . '_' . $dbName;
+    }
+    ?>
+    <?php
+    $showButton = (!(empty($textFieldsFilters) && empty($dropDnFilters)));
+    ?>
+    <div class="row buttons" <?php echo ($showButton) ? "" : 'style="display:none";' ?> >
+        <?php if ($showButton) {
+            echo CHtml::submitButton(Yii::t('RgSiteView.filter', 'Apply filter'));
+        } ?>
+    </div>
+<?php $this->endWidget(); ?>
+</div>
+
+
+<?php
+$script = '';
+foreach ($jsBinds as $elId) {
+    $wrapEl = 'jQuery("#' . $elId . '")';
+    $script .= ' ' . $wrapEl . '.on( "change", function(){ jQuery("#' . ('rggrid' . $model->rgSiteView['id']) . '")' . '.yiiGridView("update");} ); ';
+}
+$script .= ' jQuery("#' . ( 'rgFilterForm' . $model->id) . ' input[type=submit]").hide();';
+Yii::app()->clientScript->registerScript('jsBinds', $script);
+?>

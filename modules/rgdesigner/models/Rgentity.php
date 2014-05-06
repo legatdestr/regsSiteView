@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * This is the model class for table "rgentity".
+ *
+ * The followings are the available columns in table 'rgentity':
+ * @property integer $id
+ * @property string $dbview
+ * @property string $name
+ *
+ * The followings are the available model relations:
+ * @property Rgattr[] $rgattrs
+ */
+class Rgentity extends CActiveRecord {
+
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return 'rgentity';
+    }
+
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('dbview, name', 'required'),
+            array('dbview, name', 'length', 'max' => 255),
+            array('name', 'unique', 'allowEmpty' => false),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('id, dbview, name', 'safe', 'on' => 'search'),
+        );
+    }
+
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'rgattrs' => array(self::HAS_MANY, 'Rgattr', 'entity_id'),
+        );
+    }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => Yii::t('RgdesignerModule.rgentity', 'id'),
+            'dbview' => Yii::t('RgdesignerModule.rgentity', 'Name in the database'),
+            'name' => Yii::t('RgdesignerModule.rgentity', 'Displayed name'),
+        );
+    }
+
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // @todo Please modify the following code to remove attributes that should not be searched.
+
+        $criteria = new CDbCriteria;
+
+        $criteria->compare('id', $this->id);
+        $criteria->compare('dbview', $this->dbview, true);
+        $criteria->compare('name', $this->name, true);
+        $dataProvider = new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+        
+        return $dataProvider; 
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Rgentity the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
+
+    /**
+     * Save entity with attributes filled by user. 
+     * @param Rgentity $entity model
+     * @param array $attrs filled attributes by user
+     * @param boolean $useTransaction wrap or not in single transaction
+     * @param array $attrErrors passing by reference
+     * @return boolean false on unsuccessfull saving
+     * @return Rgentity on success 
+     */
+    public static function saveEntityWithAttrs($entity,  $attrs, $useTransaction = true, &$attrErrors = null) {
+        if ($useTransaction)
+            $transaction = Yii::app()->db->beginTransaction();
+        $entity_id = $entity->id;
+        try {
+            if ($entity->save()) {
+                Rgattr::updateAttrs($entity->id, $attrs, false);
+            } else {
+                throw new Exception('Cannot save entity', 1);
+            }
+        } catch (Exception $ex) {
+            if ($useTransaction)
+                $transaction->rollback();
+            $entity->id = $entity_id;
+            $attrErrors[] = $ex->getMessage();
+            //throw $ex;
+            return false;
+        }
+
+        if ($useTransaction)
+            $transaction->commit();
+
+        return $entity;
+    }
+
+}

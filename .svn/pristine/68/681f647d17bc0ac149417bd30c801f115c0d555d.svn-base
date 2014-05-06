@@ -1,0 +1,21 @@
+Install Database tables using sql/migrations/ or SQL code from sql/PostgreSQL.sql file
+Add  'ext.regsSiteView.components.*' string to your config import section
+Add the following lines to your config file:
+    'modules' => array(
+        'rgdesigner' => array(
+            'class' => 'ext.regsSiteView.modules.rgdesigner.RgdesignerModule',
+            'dbPrefix' => 'reg_',
+            'printFlashes' => true,
+            'sendFlashes' => true,
+        ),
+    ),
+
+You can use the Rg widget like this:
+<?php 
+$this->widget('ext.regsSiteView.widgets.RgSiteView', array(
+    'entity_id' => $entityModel->id,
+));
+?>
+Where $entityModel - descendant of the RgBaseModel. Id - rgentity table id.
+
+Enjoy!

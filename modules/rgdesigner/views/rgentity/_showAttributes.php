@@ -1,0 +1,132 @@
+<?php
+$entityModel = $viewData['entityModel'];
+$attrProvider = $viewData['attrProvider'];
+$attrModel = $viewData['attrModel'];
+$attrErrors = $viewData['attrErrors'];
+
+$this->breadcrumbs = array(
+    Yii::t('RgdesignerModule.constructor', 'Registry constructor') => $this->createUrl('rgentity/index'),
+    Yii::t('RgdesignerModule.constructor', 'Add registry')
+);
+
+$this->menu = array(
+    array('label' => Yii::t('RgdesignerModule.constructor', 'Registry list'), 'url' => $this->createUrl('rgentity/index'),),
+);
+
+// include css
+$cssFile = Yii::getPathOfAlias('rgdesigner.assets') . DIRECTORY_SEPARATOR . 'showAttributes.css';
+Yii::app()->clientScript->registerCssFile(CHtml::asset($cssFile));
+// include js
+$jsFile = Yii::getPathOfAlias('rgdesigner.assets') . DIRECTORY_SEPARATOR . 'showAttributes.js';
+Yii::app()->clientScript->registerScriptFile(CHtml::asset($jsFile), CClientScript::POS_END);
+?>
+
+<?php
+if ($this->module->printFlashes) {
+    foreach (Yii::app()->user->getFlashes() as $key => $message) {
+        echo '<div class="flash-' . $key . '">' . Yii::t('RgdesignerModule.constructor', $message) . "</div>\n";
+    }
+}
+?>
+<?php if ($attrErrors): ?>
+    <div class="flash-error">
+        <ul>
+            <?php
+            foreach ($attrErrors as $value) {
+                echo '<li>' . Yii::t('RgdesignerModule.constructor', $value) . '</li>';
+            }
+            ?>
+        </ul></div>
+<?php endif; ?>
+
+<div class="form">
+    <?php
+    $form = $this->beginWidget('CActiveForm', array(
+        'id' => 'showAttributes',
+        'action' => empty($entityModel->id) ? 'create' : $this->createUrl('update', array(
+                    'id' => $entityModel->id
+                ))
+    ));
+    ?>
+
+    <div class="row">
+        <?php echo $form->labelEx($entityModel, 'name'); ?>
+        <?php echo $form->textField($entityModel, 'name', array('style' => 'width:50%; min-width:100px;')); ?>
+    </div>
+
+    <div class="row legendContainer">
+        <div class="attrFilled span-2" style="width:150px; text-align: center;"><?php echo Yii::t('RgdesignerModule.constructor', 'Saved'); ?></div>
+        <div class="attrEmpty span-2" style="width:150px; text-align: center;"><?php echo Yii::t('RgdesignerModule.constructor', 'Unused'); ?></div>
+    </div>
+    <?php
+    // echo table with tabular input
+    $this->widget('zii.widgets.grid.CGridView', array(
+        'dataProvider' => $attrProvider,
+        'columns' => array(
+            array(
+                'name' => 'id',
+                'value' => 'CHtml::hiddenField( \'Rgattr[\' . $data[\'dbname\'] . \'][id]\', $data[\'id\']) . $data[\'id\'] ', // $data[\'id\']
+                'type' => 'raw',
+                'cssClassExpression' => 'empty($data[\'id\'])? "attrEmpty" : "attrFilled" ',
+            ),
+            array(
+                'name' => Yii::t('RgdesignerModule.rgattr', 'checked'),
+                'value' => 'CHtml::checkBox( \'Rgattr[\' . $data[\'dbname\'] . \'][checked]\', $data[\'enabled\'])', // $data[\'id\']
+                'type' => 'raw',
+            ),
+            array(
+                'name' => 'dbname',
+                'header' => $attrModel->attributeLabels()['dbname'],
+                'value' => 'mb_convert_case($data[\'dbname\'], MB_CASE_TITLE, "UTF-8")',
+                'type' => 'html',
+            ),
+            array(
+                'name' => 'alias',
+                'header' => $attrModel->attributeLabels()['alias'],
+                'value' => 'Chtml::textField(\'Rgattr[\' . $data[\'dbname\'] . \'][alias]\',$data[\'alias\'], array("style"=>"width:100%;"))',
+                'type' => 'raw',
+            ),
+            array(
+                'name' => 'filtertype',
+                'header' => $attrModel->attributeLabels()['filtertype'],
+                'value' => 'Chtml::dropDownList(\'Rgattr[\' . $data[\'dbname\'] . \'][filtertype]\', (empty($data[\'filtertype\'])? 0: $data[\'filtertype\']), Rgattr::getFilterType(), '
+                . 'array("style"=>"width:100%;"))',
+                'type' => 'raw',
+            ),
+            array(
+                'class' => 'CButtonColumn',
+                'header' => Yii::t('RgdesignerModule.constructor', 'Management'),
+                'template' => '{delete}',
+                'deleteButtonUrl' => 'Yii::app()->createUrl("rgdesigner/rgentity/deleteAttribute", array("id" => $data[\'id\'] ))',
+                'cssClassExpression' => 'empty($data[\'id\'])? "disabledButton" : "enabledButton" ',
+                'visible' => ($entityModel->id > 0),
+            ),
+        ),
+    ));
+    ?>
+    <?php
+    // hidden entity_id field
+    echo Chtml::hiddenField('Rgentity[id]', $entityModel->id);
+    echo Chtml::hiddenField('Rgentity[dbview]', $entityModel->dbview);
+    echo Chtml::hiddenField('action_id', 'saveAttributes');
+    ?>
+
+    <div class="row buttons">
+        <?php echo CHtml::submitButton(Yii::t('RgdesignerModule.constructor', 'Save')); ?>
+    </div>
+
+    <?php $this->endWidget(); ?>
+
+
+</div><!-- form -->
+
+<br/>
+<br/>
+<br/>
+<h3>Пример виджета, созданного на основе сохраненных параметров конструктора</h3>
+<?php
+$this->widget('ext.regsSiteView.widgets.RgSiteView', array(
+    'entity_id' => $entityModel->id,
+));
+?>
+

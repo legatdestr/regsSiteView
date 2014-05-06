@@ -1,0 +1,11 @@
+.attrEmpty {
+    background-color:  blanchedalmond;
+}
+
+.attrFilled {
+    background-color: lavender ;
+}
+
+.disabledButton a {
+    display: none;
+}

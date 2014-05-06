@@ -1,0 +1,201 @@
+<?php
+/**
+ * This file contains RgBaseModel class.
+ *
+ * @author Sergey Kochetkov <legatdestr@gmail.com>
+ * @copyright 2014 Elecard Med
+ * @license BSD License
+ *
+ * Needed the strings to be switched on in the configuration file: 
+ * 'ext.regsSiteView.components.*' 
+ * in config import section
+ */
+
+class RgBaseModel extends CActiveRecord {
+
+    /**
+     * @var rgSiteView array related row of rgentity
+     * integer $rg_id ID of rgsiteview model
+     * string $rg_dbview db view name
+     * string @rg_name "Human" name
+     */
+    public $rgSiteView = array();
+    private $_attrLabels = array();
+    private $_visibleAttr = array();
+    private $_visAttrsDbNames = array();
+
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return get_class($this);
+    }
+
+    public function getVisibleAttrsDbNames() {
+        if (empty($this->_visAttrsDbNames)) {
+            $attrs = $this->getVisibleAttrs();
+            foreach ($attrs as $name => $attrRow) {
+                $this->_visAttrsDbNames[$name] = $name;
+            }
+        }
+        return $this->_visAttrsDbNames;
+    }
+
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        return array(
+            array(
+                $this->getVisibleAttrsDbNames(),
+                'safe',
+                'on' => 'search'
+            )
+        );
+    }
+
+    /**
+     * @return array customized attribute labels for current siteView
+     */
+    private function _getAttrLabels() {
+
+        if (empty($this->_attrLabels)) {
+            $attrs = $this->getVisibleAttrs(); // array
+            $res = array();
+            foreach ($attrs as $attrRow) {
+                $key = $attrRow['dbname'];
+                $res[$key] = $attrRow['alias'];
+            }
+            $this->_attrLabels = $res;
+        }
+
+        return $this->_attrLabels;
+    }
+
+    /**
+     * Returns table rows for siteView visible attributes
+     * @return array RgAttr 
+     */
+    public function getVisibleAttrs() {
+        if (empty($this->_visibleAttr)) {
+            $entity_id = $this->rgSiteView["id"];
+            $db = Yii::app()->db;
+            $cmd = $db->createCommand(
+                    'SELECT * '
+                    . 'FROM rgattr '
+                    . 'WHERE '
+                    . ' enabled = true and '
+                    . ' entity_id = :entity_id'
+            );
+            $cmd->bindParam(':entity_id', $entity_id, PDO::PARAM_INT);
+            $rows = $cmd->queryAll(true);
+            $res = array();
+            foreach ($rows as $row) {
+                $key = $row['dbname'];
+                $res[$key] = $row;
+            }
+            $this->_visibleAttr = $res;
+        }
+        return $this->_visibleAttr;
+    }
+
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    final public function attributeLabels() {
+        return $this->_getAttrLabels();
+    }
+
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search() {
+        // Getting the metadata of the current table/view 
+        $tabMeta = $this->dbConnection->schema->getTable($this->tableName());
+        // Getting the attribute names of the current table/view
+        $availAttrs = array_keys($this->attributes);
+
+        $criteria = new CDbCriteria;
+        $attributes = $this->getVisibleAttrsDbNames();
+        
+        // Getting only those attributes which the real database table/view 
+        // and the "rgattr" table include
+        $attributes = array_intersect($attributes, $availAttrs);
+
+        foreach ($attributes as $key => $value) {
+            $colMeta = $tabMeta->getColumn($key);
+            // specially for PostgreSQL. Its Yii driver knows nothing about bigint type
+            // and "like" comparison doesn`t work correctly 
+            if (($colMeta->dbType === 'bigint') || ($colMeta->type === 'integer')) {
+                $int = intval($this->$key);
+                if ($this->$key) {
+                    $criteria->addCondition($key . ' = :' . $key);
+                    $criteria->params[':' . $key] = $int;
+                }
+            } else
+                $criteria->compare($key, $this->$key, true);
+        }
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
+    /**
+     * Scans all visible model attributes and returns attributes divided by 
+     * filtertype
+     * @return array
+     */
+    public function getAttrFilters() {
+        $visibleAttrs = $this->getVisibleAttrs();
+        $filters = array();
+        foreach ($visibleAttrs as $key => $rowAttr) {
+            $filterType = $rowAttr['filtertype'];
+            if ($filterType > 0) {
+                $filters[$filterType][] = $rowAttr;
+            }
+        }
+        return $filters;
+    }
+
+    /**
+     * Get CActiveDataProvider with filter values
+     * @param string $fieldName databse view field name to extract filter values
+     * @return \CActiveDataProvider
+     */
+    public function getDrDnFilterProvider($fieldName) {
+        // do not use ActiveRecord here! 
+        $cmd = Yii::app()->db->createCommand()
+                ->select($fieldName)
+                ->from($this->tableName())
+                ->group($fieldName)
+                ->order($fieldName);
+        $cmd->getText();
+        $dataProvider = new CSqlDataProvider($cmd);
+
+        return $dataProvider;
+    }
+
+    /** Redeclared for implementing caching based on $entity_id  */
+    public function __construct($scenario = 'insert') {
+        parent::__construct($scenario);
+        if (empty($this->rgSiteView)) {
+            $model = RgModelCreator::getInstance();
+            if (!empty($model))
+                $this->rgSiteView = $model->rgSiteView;
+        }
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return the last created model 
+     */
+    public static function model($className = __CLASS__) {
+        $model = RgModelCreator::getInstance();
+        return $model;
+    }
+
+}
