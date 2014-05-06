@@ -28,7 +28,7 @@ class RgBaseModel extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return Yii::app()->modules['rgdesigner']['dbSchema'] . '.'. get_class($this);
+        return Yii::app()->params['dbSchema'] . '.'. get_class($this);
     }
 
     public function getVisibleAttrsDbNames() {

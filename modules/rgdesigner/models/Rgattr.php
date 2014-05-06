@@ -30,7 +30,7 @@ class Rgattr extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return Yii::app()->modules['rgdesigner']['dbSchema'] . '.rgattr';
+        return Yii::app()->params['dbSchema'] . '.rgattr';
     }
 
     /**
