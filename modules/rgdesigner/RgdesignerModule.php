@@ -14,7 +14,6 @@ class RgdesignerModule extends CWebModule {
      * can be changed in the module settings in the application configuration file
      */
     public $dbPrefix = 'reg_';
-    
     public $dbSchema;
 
     /**
@@ -38,14 +37,21 @@ class RgdesignerModule extends CWebModule {
     public $useTransaction = true;
 
     public function init() {
+        
         // this method is called when the module is being created
         // you may place code here to customize the module or the application
         // import the module-level models and components
 
-        $this->setImport(array(
-            'rgdesigner.models.*',
-            'rgdesigner.helpers.*',
-        ));
+        // I didn't find normal method for importing these classes using Yii.
+        // $this->setImport() doesn't work correctly if this module is a submodule
+        $DS = DIRECTORY_SEPARATOR;
+        $inclPath = __DIR__ . $DS;
+        
+        require $inclPath . 'models' . $DS . 'Rgattr.php';
+        require $inclPath . 'models' . $DS . 'Rgentity.php';
+        require $inclPath . 'helpers' . $DS . 'RgAttrsHelper.php';
+        require $inclPath . 'helpers' . $DS . 'RgDbHelper.php';
+        
     }
 
     /**
