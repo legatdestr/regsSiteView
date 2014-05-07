@@ -17,7 +17,7 @@ class RgSiteView extends CWidget {
 
     public function run() {
         // this method will be invoked in CBaseController::endWidget()
-
+        
         $model = RgModelCreator::getInstance($this->entity_id, 'search');
         if (empty($model)) {
             echo '<div class="flash-error">'

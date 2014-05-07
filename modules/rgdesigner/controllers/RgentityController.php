@@ -6,7 +6,9 @@ class RgentityController extends Controller {
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
-    public $layout = '//layouts/column2';
+    public function init() {
+        $this->layout = $this->module->layout;
+    }
 
     /**
      * @return array action filters
@@ -182,8 +184,7 @@ class RgentityController extends Controller {
      * Lists all models.
      */
     public function actionIndex() {
-
-        $model = new Rgentity('search'); 
+        $model = new Rgentity('search');
         $model->unsetAttributes();  // clear any default values
         // используется для поиска
         if (isset($_GET['Rgentity'])) {

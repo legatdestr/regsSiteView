@@ -18,7 +18,7 @@ return array(
             'dbPrefix' => 'reg_',
             'printFlashes' => true,
             'sendFlashes' => true,
-            'dbSchema' => 'public',
+            'layout' => '//layouts/column1',
         ),
     ),
     // application components

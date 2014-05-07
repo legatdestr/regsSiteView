@@ -14,7 +14,8 @@ class RgdesignerModule extends CWebModule {
      * can be changed in the module settings in the application configuration file
      */
     public $dbPrefix = 'reg_';
-    public $dbSchema;
+
+    public $layout = '//layouts/column2';
 
     /**
      * Send or not user messages
@@ -47,10 +48,10 @@ class RgdesignerModule extends CWebModule {
         $DS = DIRECTORY_SEPARATOR;
         $inclPath = __DIR__ . $DS;
         
-        require $inclPath . 'models' . $DS . 'Rgattr.php';
-        require $inclPath . 'models' . $DS . 'Rgentity.php';
-        require $inclPath . 'helpers' . $DS . 'RgAttrsHelper.php';
-        require $inclPath . 'helpers' . $DS . 'RgDbHelper.php';
+        require_once $inclPath . 'models' . $DS . 'Rgattr.php';
+        require_once $inclPath . 'models' . $DS . 'Rgentity.php';
+        require_once $inclPath . 'helpers' . $DS . 'RgAttrsHelper.php';
+        require_once $inclPath . 'helpers' . $DS . 'RgDbHelper.php';
         
     }
 
