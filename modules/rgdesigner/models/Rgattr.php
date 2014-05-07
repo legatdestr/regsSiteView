@@ -30,7 +30,7 @@ class Rgattr extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return isset(Yii::app()->params['dbSchema']) ? Yii::app()->params['dbSchema'] . '.rgattr' :  'rgattr';
+        return isset(Yii::app()->params['dbSchema']) ? Yii::app()->params['dbSchema'] . '.rgattr' : 'rgattr';
     }
 
     /**
@@ -134,7 +134,7 @@ class Rgattr extends CActiveRecord {
      * @param integer $entity_id Entity Id 
      */
     public static function disableEntityAttrs($entity_id) {
-        
+
         Yii::app()
                 ->db
                 ->createCommand('UPDATE ' . self::model()->tableName() .
@@ -206,6 +206,14 @@ class Rgattr extends CActiveRecord {
             $transaction->commit;
         }
         return true;
+    }
+
+    public function beforeSave() {
+        if ((parent::beforeSave()) && ($this->isNewRecord)) {
+            $this->id = Yii::app()->db->createCommand('SELECT uuid_generate_v4();')->query()->readAll()[0]['uuid_generate_v4'];
+            return true;
+        }
+        return false;
     }
 
 }
