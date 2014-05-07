@@ -1,0 +1,9 @@
+0000000000000000000000000000000000000000 b3bf5738abdb27acb185b103f7d4751f2d6a6325 legatdestr <legatdestr@gmail.com> 1399361307 +0700	commit (initial): first
+b3bf5738abdb27acb185b103f7d4751f2d6a6325 e6a51438b21fb2cf9642a87c819f02aea13cf8f7 legatdestr <legatdestr@gmail.com> 1399364055 +0700	commit: add table prefix
+e6a51438b21fb2cf9642a87c819f02aea13cf8f7 6a5e0d0173a830cf6ce9f3ca95957b3bf1bbbdbc legatdestr <legatdestr@gmail.com> 1399370591 +0700	commit: update
+6a5e0d0173a830cf6ce9f3ca95957b3bf1bbbdbc d8649c346c9a060397c95995473a2303b8e9168f legatdestr <legatdestr@gmail.com> 1399370694 +0700	pull: Merge made by the 'recursive' strategy.
+d8649c346c9a060397c95995473a2303b8e9168f 79c1f5711b5e84c1fc951fada1b58c88fe956785 legatdestr <legatdestr@gmail.com> 1399371513 +0700	commit: update
+79c1f5711b5e84c1fc951fada1b58c88fe956785 dc781e9558eac3d1a6da8cc2f7e8f42f836cc827 legatdestr <legatdestr@gmail.com> 1399432026 +0700	commit: Fixed search path problem
+dc781e9558eac3d1a6da8cc2f7e8f42f836cc827 4b9c0fea95e5149eb9cfb4cf492922806defa71b legatdestr <legatdestr@gmail.com> 1399433517 +0700	commit: Added layout property
+4b9c0fea95e5149eb9cfb4cf492922806defa71b d7f29227a2c6adea766e23c96f822c02266c9197 legatdestr <legatdestr@gmail.com> 1399437126 +0700	commit: added theme
+d7f29227a2c6adea766e23c96f822c02266c9197 b39aade1ca76a9ce2d1b6e7a550537c1efd5b3cc legatdestr <legatdestr@gmail.com> 1399442707 +0700	commit: Added
