@@ -209,11 +209,11 @@ class Rgattr extends CActiveRecord {
     }
 
     public function beforeSave() {
-        if ((parent::beforeSave()) && ($this->isNewRecord)) {
-            $this->id = Yii::app()->db->createCommand('SELECT uuid_generate_v4();')->query()->readAll()[0]['uuid_generate_v4'];
-            return true;
-        }
-        return false;
+//        if ((parent::beforeSave()) && ($this->isNewRecord)) {
+//            $this->id = Yii::app()->db->createCommand('SELECT uuid_generate_v4();')->query()->readAll()[0]['uuid_generate_v4'];
+//            return true;
+//        }
+//        return false;
     }
 
 }
