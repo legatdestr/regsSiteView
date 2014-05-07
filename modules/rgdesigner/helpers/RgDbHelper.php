@@ -23,8 +23,11 @@ abstract class RgDbHelper extends CComponent {
             $sql = '';
             switch ($driverName) {
                 case 'pgsql':
+                    
                     $sql = 'SELECT table_name from INFORMATION_SCHEMA.views '
-                            . ' WHERE table_schema = ANY (current_schemas(false)) '
+                            . ' WHERE table_schema =  ' .
+                        (isset(Yii::app()->params['dbSchema'])? 
+                        "'" . Yii::app()->params['dbSchema'] . "'" : ' ANY (current_schemas(false)) ' )
                             . "AND table_name like '" . $rgPrefix . "%'";
 
                     break;
