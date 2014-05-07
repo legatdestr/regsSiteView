@@ -134,9 +134,11 @@ class Rgattr extends CActiveRecord {
      * @param integer $entity_id Entity Id 
      */
     public static function disableEntityAttrs($entity_id) {
+        
         Yii::app()
                 ->db
-                ->createCommand('UPDATE rgattr SET enabled = false WHERE entity_id = :entity_id')
+                ->createCommand('UPDATE ' . $this->tableName() .
+                        ' SET enabled = false WHERE entity_id = :entity_id')
                 ->bindParam(':entity_id', $entity_id, PDO::PARAM_INT)
                 ->execute();
     }
