@@ -16,6 +16,8 @@ class RgdesignerModule extends CWebModule {
     public $dbPrefix = 'reg_';
 
     public $layout = '//layouts/column2';
+    
+    public $theme = '';
 
     /**
      * Send or not user messages
@@ -52,6 +54,10 @@ class RgdesignerModule extends CWebModule {
         require_once $inclPath . 'models' . $DS . 'Rgentity.php';
         require_once $inclPath . 'helpers' . $DS . 'RgAttrsHelper.php';
         require_once $inclPath . 'helpers' . $DS . 'RgDbHelper.php';
+        
+        if ($this->theme){
+            Yii::app()->theme = $this->theme;
+        }
         
     }
 

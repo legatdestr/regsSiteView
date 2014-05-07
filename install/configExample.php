@@ -19,6 +19,7 @@ return array(
             'printFlashes' => true,
             'sendFlashes' => true,
             'layout' => '//layouts/column1',
+            'theme' => '',
         ),
     ),
     // application components

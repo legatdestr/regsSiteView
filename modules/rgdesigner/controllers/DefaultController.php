@@ -13,4 +13,8 @@ class DefaultController extends Controller {
         $this->render('index');
     }
 
+    public function init() {
+        $this->layout = $this->module->layout;
+    }
+
 }
