@@ -9,6 +9,6 @@ $this->widget('zii.widgets.grid.CGridView', array(
     //'filter' => $model,
     'columns' => Chtml::listData($model->getVisibleAttrs(), 'dbname', 'dbname'),
     'beforeAjaxUpdate' => 'function(id,options){'
-    . 'options.data =  $("#rgFilterForm' . $model->id . '").serialize();'
+    . 'options.data =  $("#rgFilterForm' . $model->rgSiteView['id'] . '").serialize();'
     . '}',
 ));

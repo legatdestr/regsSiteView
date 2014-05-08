@@ -7,7 +7,7 @@
 <div class="form">
     <?php
     $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'rgFilterForm' . $model->id,
+        'id' => 'rgFilterForm' . $model->rgSiteView['id'],
         'htmlOptions' => array(
             'onsubmit' => 'return false;',
         ),
@@ -46,7 +46,7 @@
         }
         ?>
     </div>
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 </div>
 
 
@@ -57,6 +57,6 @@ foreach ($jsBinds as $elId) {
     $wrapEl = 'jQuery("#' . $elId . '")';
     $script .= ' ' . $wrapEl . '.on( "change", function(){ jQuery("#' . ('rggrid' . $model->rgSiteView['id']) . '")' . '.yiiGridView("update");} ); ';
 }
-$script .= ' jQuery("#' . ( 'rgFilterForm' . $model->id) . ' input[type=submit]").hide();';
+$script .= ' jQuery("#' . ( 'rgFilterForm' . $model->rgSiteView['id']) . ' input[type=submit]").hide();';
 Yii::app()->clientScript->registerScript('jsBinds', $script);
 ?>
