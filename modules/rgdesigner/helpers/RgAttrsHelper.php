@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file contains RgAttrsHelper class.
  *
@@ -6,7 +7,6 @@
  * @copyright 2014 Elecard Med
  * @license BSD License
  */
-
 abstract class RgAttrsHelper extends CComponent {
 
     /**
@@ -16,9 +16,9 @@ abstract class RgAttrsHelper extends CComponent {
      * @return \CSqlDataProvider 
      */
     public static function getRgAttrs($entity_id) {
-        
-        $sql = 'SELECT * FROM '. Rgattr::model()->tableName(). ' WHERE entity_id = :entity_id';
-        
+
+        $sql = 'SELECT * FROM ' . Rgattr::model()->tableName() . ' WHERE entity_id = :entity_id';
+
         $dataProvider = new CSqlDataProvider($sql, array(
             'pagination' => false,
             'params' => array(
@@ -56,7 +56,7 @@ abstract class RgAttrsHelper extends CComponent {
         if (!$dbViewName) {
             $dbViewName = Yii::app()->db->createCommand(
                                     'SELECT dbview '
-                                    . ' FROM ' . Rgentity::model()->tableName() 
+                                    . ' FROM ' . Rgentity::model()->tableName()
                                     . ' WHERE id = :entity_id ORDER BY dbview')
                             ->bindParam(':entity_id', $entity_id, PDO::PARAM_INT)->queryScalar();
         }
@@ -87,7 +87,9 @@ abstract class RgAttrsHelper extends CComponent {
             }
         }
         $resAttrs = array_merge($rgAttrs, $res);
-        return new CArrayDataProvider($resAttrs);
+        return new CArrayDataProvider($resAttrs, array(
+            'pagination' => false,
+        ));
     }
 
     /**
@@ -110,7 +112,9 @@ abstract class RgAttrsHelper extends CComponent {
             $newRow['dbname'] = $attr;
             $res[] = $newRow;
         } // foreach
-        return new CArrayDataProvider($res);
+        return new CArrayDataProvider($res, array(
+            'pagination' => false,
+        ));
     }
 
 }
