@@ -28,8 +28,8 @@ class RgBaseModel extends CActiveRecord {
      * @return string the associated database table name
      */
     public function tableName() {
-        return isset(Yii::app()->params['dbSchema']) ? 
-        Yii::app()->params['dbSchema'] . '.' . get_class($this) :  get_class($this);
+        return isset(Yii::app()->params['dbSchema']) ?
+                Yii::app()->params['dbSchema'] . '.' . get_class($this) : get_class($this);
     }
 
     public function getVisibleAttrsDbNames() {
@@ -173,7 +173,9 @@ class RgBaseModel extends CActiveRecord {
                 ->group($fieldName)
                 ->order($fieldName);
         $cmd->getText();
-        $dataProvider = new CSqlDataProvider($cmd);
+        $dataProvider = new CSqlDataProvider($cmd, array(
+            'pagination' => false,
+        ));
 
         return $dataProvider;
     }
