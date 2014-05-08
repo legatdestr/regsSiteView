@@ -86,7 +86,8 @@ class RgBaseModel extends CActiveRecord {
                     . ' FROM  ' . Rgattr::model()->tableName()
                     . ' WHERE '
                     . ' enabled = true and '
-                    . ' entity_id = :entity_id'
+                    . ' entity_id = :entity_id '
+                    . ' ORDER BY position ASC'
             );
             $cmd->bindParam(':entity_id', $entity_id, PDO::PARAM_INT);
             $rows = $cmd->queryAll(true);

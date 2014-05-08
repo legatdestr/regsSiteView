@@ -95,6 +95,13 @@ if ($this->module->printFlashes) {
                 'type' => 'raw',
             ),
             array(
+                'name' => 'position',
+                'header' => $attrModel->attributeLabels()['position'],
+                'value' => 'Chtml::textField(\'Rgattr[\' . $data[\'dbname\'] . \'][position]\',$data[\'position\'], array("style"=>"width:100%;"))',
+                'type' => 'raw',
+            // 'htmlOptions'=>array('width'=>'40px'),
+            ),
+            array(
                 'class' => 'CButtonColumn',
                 'header' => Yii::t('RgdesignerModule.constructor', 'Management'),
                 'template' => '{delete}',
@@ -113,10 +120,10 @@ if ($this->module->printFlashes) {
     ?>
 
     <div class="row buttons">
-        <?php echo CHtml::submitButton(Yii::t('RgdesignerModule.constructor', 'Save')); ?>
+<?php echo CHtml::submitButton(Yii::t('RgdesignerModule.constructor', 'Save')); ?>
     </div>
 
-    <?php $this->endWidget(); ?>
+<?php $this->endWidget(); ?>
 
 
 </div><!-- form -->

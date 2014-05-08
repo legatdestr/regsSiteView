@@ -19,9 +19,11 @@ class m140415_101346_create_attr_tables extends CDbMigration {
             'filtertype' => 'integer DEFAULT 0',
             'alias' => 'string',
             'enabled' => 'boolean DEFAULT false',
+            'position' => 'integer',
         ));
         // creating index on the entity_id column
         $this->createIndex('idx_rgattr_ent_id', 'rgattr', 'entity_id');
+        $this->createIndex('idx_rgattr_pos', 'rgattr', 'position');
         // FK creating
         $this->addForeignKey(
                 'fk_rgattr', 'rgattr', 'entity_id', 'rgentity', 'id', 'CASCADE', 'CASCADE');

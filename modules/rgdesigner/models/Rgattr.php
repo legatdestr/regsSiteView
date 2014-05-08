@@ -40,13 +40,13 @@ class Rgattr extends CActiveRecord {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('entity_id, filtertype', 'numerical', 'integerOnly' => true),
+            array('entity_id, filtertype, position', 'numerical', 'integerOnly' => true),
             array('entity_id, dbname, alias', 'required'),
             array('dbname, alias', 'length', 'max' => 255),
             array('enabled', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, entity_id, dbname, filtertype, alias, enabled', 'safe', 'on' => 'search'),
+            array('id, entity_id, dbname, filtertype, alias, enabled, position', 'safe', 'on' => 'search'),
         );
     }
 
@@ -74,6 +74,7 @@ class Rgattr extends CActiveRecord {
             'alias' => Yii::t('RgdesignerModule.rgattr', 'Human readable name'),
             'enabled' => Yii::t('RgdesignerModule.rgattr', 'Enabled/disabled'),
             'checker' => Yii::t('RgdesignerModule.rgattr', 'Enabled/disabled'),
+            'position' => Yii::t('RgdesignerModule.rgattr', 'Position'),
         );
     }
 

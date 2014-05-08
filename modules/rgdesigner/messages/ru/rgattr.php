@@ -11,5 +11,6 @@ return array(
     'DropDown List' => 'Выпадающий список',
     'Text filter' => 'Текстовый фильтр',
     'Not specified' => 'Не задан',
+    'Position' => 'Позиция',
 );
 
